@@ -1,17 +1,16 @@
-import {Request, Response, Router} from 'express';
-import {CreateAccountCommand, handleCreateAccount} from './CreateAccountCommand';
+import { Router, Request, Response } from 'express';
+import { CreateAccountCommand, handleCreateAccount } from './CreateAccountCommand';
 import {requireUser} from "../../supabase/requireUser";
-import {WebApiSetup} from "@event-driven-io/emmett-expressjs";
+import {on, WebApiSetup} from "@event-driven-io/emmett-expressjs";
+import {assertNotEmptyString} from "@event-driven-io/emmett";
 import {assertNotEmpty} from "../../components/util/assertions";
 
 
 type CreateAccountRequest = Request<
-    Partial<{ id: string }>,
+    Partial<{ id:string }>,
     unknown,
-    Partial<{
-        initialBalance: string,
-        account: string
-    }>
+    Partial<{ initialBalance:string,
+account:string }>
 >;
 
 export const api =
@@ -26,19 +25,19 @@ export const api =
                 }
 
                 try {
-                    const command: CreateAccountCommand = {
+                    const command:CreateAccountCommand = {
                         data: {
-                            initialBalance: assertNotEmpty(req.body.initialBalance),
-                            account: assertNotEmpty(req.body.account)
+                            			initialBalance:assertNotEmpty(req.body.initialBalance),
+			account:assertNotEmpty(req.body.account)
                             //amount: req.body.amount,
                         },
                         type: "CreateAccount"
                     }
                     await handleCreateAccount(assertNotEmpty(req.params.id), command);
-                    return res.status(200).json({ok: true});
+                    return res.status(200).json({ ok: true });
                 } catch (err) {
                     console.error(err);
-                    return res.status(500).json({ok: false, error: 'Server error'});
+                    return res.status(500).json({ ok: false, error: 'Server error' });
                 }
             });
         };

@@ -1,17 +1,16 @@
-import {Request, Response, Router} from 'express';
-import {AddBookCommand, handleAddBook} from './AddBookCommand';
+import { Router, Request, Response } from 'express';
+import { AddBookCommand, handleAddBook } from './AddBookCommand';
 import {requireUser} from "../../supabase/requireUser";
-import {WebApiSetup} from "@event-driven-io/emmett-expressjs";
+import {on, WebApiSetup} from "@event-driven-io/emmett-expressjs";
+import {assertNotEmptyString} from "@event-driven-io/emmett";
 import {assertNotEmpty} from "../../components/util/assertions";
 
 
 type AddBookRequest = Request<
-    Partial<{ id: string }>,
+    Partial<{ id:string }>,
     unknown,
-    Partial<{
-        name: string,
-        email: string
-    }>
+    Partial<{ name:string,
+email:string }>
 >;
 
 export const api =
@@ -26,19 +25,19 @@ export const api =
                 }
 
                 try {
-                    const command: AddBookCommand = {
+                    const command:AddBookCommand = {
                         data: {
-                            name: assertNotEmpty(req.body.name),
-                            email: assertNotEmpty(req.body.email)
+                            			name:assertNotEmpty(req.body.name),
+			email:assertNotEmpty(req.body.email)
                             //amount: req.body.amount,
                         },
                         type: "AddBook"
                     }
                     await handleAddBook(assertNotEmpty(req.params.id), command);
-                    return res.status(200).json({ok: true});
+                    return res.status(200).json({ ok: true });
                 } catch (err) {
                     console.error(err);
-                    return res.status(500).json({ok: false, error: 'Server error'});
+                    return res.status(500).json({ ok: false, error: 'Server error' });
                 }
             });
         };

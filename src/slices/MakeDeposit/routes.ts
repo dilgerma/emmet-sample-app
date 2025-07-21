@@ -1,17 +1,16 @@
-import {Request, Response, Router} from 'express';
-import {handleMakeDeposit, MakeDepositCommand} from './MakeDepositCommand';
+import { Router, Request, Response } from 'express';
+import { MakeDepositCommand, handleMakeDeposit } from './MakeDepositCommand';
 import {requireUser} from "../../supabase/requireUser";
-import {WebApiSetup} from "@event-driven-io/emmett-expressjs";
+import {on, WebApiSetup} from "@event-driven-io/emmett-expressjs";
+import {assertNotEmptyString} from "@event-driven-io/emmett";
 import {assertNotEmpty} from "../../components/util/assertions";
 
 
 type MakeDepositRequest = Request<
-    Partial<{ id: string }>,
+    Partial<{ id:string }>,
     unknown,
-    Partial<{
-        account: string,
-        amount: any
-    }>
+    Partial<{ account:string,
+amount:any }>
 >;
 
 export const api =
@@ -26,19 +25,19 @@ export const api =
                 }
 
                 try {
-                    const command: MakeDepositCommand = {
+                    const command:MakeDepositCommand = {
                         data: {
-                            account: assertNotEmpty(req.body.account),
-                            amount: assertNotEmpty(req.body.amount)
+                            			account:assertNotEmpty(req.body.account),
+			amount:assertNotEmpty(req.body.amount)
                             //amount: req.body.amount,
                         },
                         type: "MakeDeposit"
                     }
                     await handleMakeDeposit(assertNotEmpty(req.params.id), command);
-                    return res.status(200).json({ok: true});
+                    return res.status(200).json({ ok: true });
                 } catch (err) {
                     console.error(err);
-                    return res.status(500).json({ok: false, error: 'Server error'});
+                    return res.status(500).json({ ok: false, error: 'Server error' });
                 }
             });
         };

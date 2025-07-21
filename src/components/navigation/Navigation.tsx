@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, {useState} from "react";
 
-export const Navigation = () => {
+export const Navigation = ()=>{
 
     const [isMenuActive, setIsMenuActive] = useState<boolean>(false)
 
@@ -34,10 +34,10 @@ export const Navigation = () => {
             <div className={`navbar-menu ${isMenuActive ? 'is-active' : ''}`}>
                 <div className="navbar-start">
                     <Link href="/screen" className="navbar-item">
-                        Screen
-                    </Link>,<Link href="/debug" className="navbar-item">
-                    Debug
-                </Link>
+                                            Screen
+                                        </Link>,<Link href="/debug" className="navbar-item">
+                                            Debug
+                                        </Link>
                 </div>
             </div>
         </nav>

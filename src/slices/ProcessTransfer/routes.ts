@@ -1,19 +1,18 @@
-import {Request, Response, Router} from 'express';
-import {handleProcessTransfer, ProcessTransferCommand} from './ProcessTransferCommand';
+import { Router, Request, Response } from 'express';
+import { ProcessTransferCommand, handleProcessTransfer } from './ProcessTransferCommand';
 import {requireUser} from "../../supabase/requireUser";
-import {WebApiSetup} from "@event-driven-io/emmett-expressjs";
+import {on, WebApiSetup} from "@event-driven-io/emmett-expressjs";
+import {assertNotEmptyString} from "@event-driven-io/emmett";
 import {assertNotEmpty} from "../../components/util/assertions";
 
 
 type ProcessTransferRequest = Request<
-    Partial<{ id: string }>,
+    Partial<{ id:string }>,
     unknown,
-    Partial<{
-        amount: any,
-        account: string,
-        sourceAccount: string,
-        transactionId: string
-    }>
+    Partial<{ amount:any,
+account:string,
+sourceAccount:string,
+transactionId:string }>
 >;
 
 export const api =
@@ -28,21 +27,21 @@ export const api =
                 }
 
                 try {
-                    const command: ProcessTransferCommand = {
+                    const command:ProcessTransferCommand = {
                         data: {
-                            amount: assertNotEmpty(req.body.amount),
-                            account: assertNotEmpty(req.body.account),
-                            sourceAccount: assertNotEmpty(req.body.sourceAccount),
-                            transactionId: assertNotEmpty(req.body.transactionId)
+                            			amount:assertNotEmpty(req.body.amount),
+			account:assertNotEmpty(req.body.account),
+			sourceAccount:assertNotEmpty(req.body.sourceAccount),
+			transactionId:assertNotEmpty(req.body.transactionId)
                             //amount: req.body.amount,
                         },
                         type: "ProcessTransfer"
                     }
                     await handleProcessTransfer(assertNotEmpty(req.params.id), command);
-                    return res.status(200).json({ok: true});
+                    return res.status(200).json({ ok: true });
                 } catch (err) {
                     console.error(err);
-                    return res.status(500).json({ok: false, error: 'Server error'});
+                    return res.status(500).json({ ok: false, error: 'Server error' });
                 }
             });
         };

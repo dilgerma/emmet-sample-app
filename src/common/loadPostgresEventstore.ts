@@ -5,15 +5,15 @@ import {CustomersToBeNotifiedProjection} from "../slices/CustomersToBeNotified/C
 import {AccountBalanceProjection} from "../slices/AccountBalance/AccountBalanceProjection"
 import {OpenTransfersProjection} from "../slices/OpenTransfers/OpenTransfersProjection"
 
-export const findEventstore = async () => {
+    export const findEventstore = async () => {
 
 
     return getPostgreSQLEventStore(postgresUrl, {
         projections: projections.inline([
             CustomersToBeNotifiedProjection,
-            AccountBalanceProjection,
-            OpenTransfersProjection
+AccountBalanceProjection,
+OpenTransfersProjection
         ]),
-    });
+});
 
 }
