@@ -1,25 +1,23 @@
-import type { Command } from '@event-driven-io/emmett'
-import { CommandHandler } from '@event-driven-io/emmett';
+import type {Command} from '@event-driven-io/emmett'
+import {CommandHandler} from '@event-driven-io/emmett';
 import {Account2Events} from "../../events/Account2Events";
 import {findEventstore} from "../../common/loadPostgresEventstore";
 
 export type CloseTransferCommand = Command<'CloseTransfer', {
-          account: string,
-  transactionId: string,
-        }>;
+    account: string,
+    transactionId: string,
+}>;
 
 // TODO-AI keep attributes in state optional
-export type CloseTransferState = {
-}
+export type CloseTransferState = {}
 
-export const CloseTransferInitialState = (): CloseTransferState => ({
-});
+export const CloseTransferInitialState = (): CloseTransferState => ({});
 
 export const evolve = (
     state: CloseTransferState,
     event: Account2Events,
 ): CloseTransferState => {
-    const { type, data } = event;
+    const {type, data} = event;
 
     switch (type) {
         // case "..Event":
@@ -39,24 +37,28 @@ Remove the TODO Comment afterwards.
 
 AI-TODO end
 */
-    export const decide = (
+export const decide = (
     command: CloseTransferCommand,
     state: CloseTransferState,
 ): Account2Events[] => {
     return [{
         type: "TransferClosed",
-            data: {
-        			account:command.data.account,
-			transactionId:command.data.transactionId
-    }}]
+        data: {
+            account: command.data.account,
+            transactionId: command.data.transactionId
+        }
+    }]
 };
 
 
-const CloseTransferCommandHandler = CommandHandler<CloseTransferState, Account2Events>({evolve,initialState:CloseTransferInitialState});
+const CloseTransferCommandHandler = CommandHandler<CloseTransferState, Account2Events>({
+    evolve,
+    initialState: CloseTransferInitialState
+});
 
-export const handleCloseTransfer = async (id:string,command:CloseTransferCommand) => {
+export const handleCloseTransfer = async (id: string, command: CloseTransferCommand) => {
     const eventStore = await findEventstore()
-    await CloseTransferCommandHandler(eventStore, id, (state:CloseTransferState)=>decide(command,state))
+    await CloseTransferCommandHandler(eventStore, id, (state: CloseTransferState) => decide(command, state))
 
 }
 

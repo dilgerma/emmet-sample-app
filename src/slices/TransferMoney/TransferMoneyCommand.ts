@@ -1,27 +1,25 @@
-import type { Command } from '@event-driven-io/emmett'
-import { CommandHandler } from '@event-driven-io/emmett';
+import type {Command} from '@event-driven-io/emmett'
+import {CommandHandler} from '@event-driven-io/emmett';
 import {Account2Events} from "../../events/Account2Events";
 import {findEventstore} from "../../common/loadPostgresEventstore";
 
 export type TransferMoneyCommand = Command<'TransferMoney', {
-          amount: string,
-  targetAccount: string,
-  account: string,
-  transactionId: string,
-        }>;
+    amount: string,
+    targetAccount: string,
+    account: string,
+    transactionId: string,
+}>;
 
 // TODO-AI keep attributes in state optional
-export type TransferMoneyState = {
-}
+export type TransferMoneyState = {}
 
-export const TransferMoneyInitialState = (): TransferMoneyState => ({
-});
+export const TransferMoneyInitialState = (): TransferMoneyState => ({});
 
 export const evolve = (
     state: TransferMoneyState,
     event: Account2Events,
 ): TransferMoneyState => {
-    const { type, data } = event;
+    const {type, data} = event;
 
     switch (type) {
         // case "..Event":
@@ -67,26 +65,30 @@ Title: spec: Transfer Money
 # Spec End
 AI-TODO end
 */
-    export const decide = (
+export const decide = (
     command: TransferMoneyCommand,
     state: TransferMoneyState,
 ): Account2Events[] => {
     return [{
         type: "MoneyTransferRequested",
-            data: {
-        			amount:command.data.amount,
-			targetAccount:command.data.targetAccount,
-			account:command.data.account,
-			transactionId:command.data.transactionId
-    }}]
+        data: {
+            amount: command.data.amount,
+            targetAccount: command.data.targetAccount,
+            account: command.data.account,
+            transactionId: command.data.transactionId
+        }
+    }]
 };
 
 
-const TransferMoneyCommandHandler = CommandHandler<TransferMoneyState, Account2Events>({evolve,initialState:TransferMoneyInitialState});
+const TransferMoneyCommandHandler = CommandHandler<TransferMoneyState, Account2Events>({
+    evolve,
+    initialState: TransferMoneyInitialState
+});
 
-export const handleTransferMoney = async (id:string,command:TransferMoneyCommand) => {
+export const handleTransferMoney = async (id: string, command: TransferMoneyCommand) => {
     const eventStore = await findEventstore()
-    await TransferMoneyCommandHandler(eventStore, id, (state:TransferMoneyState)=>decide(command,state))
+    await TransferMoneyCommandHandler(eventStore, id, (state: TransferMoneyState) => decide(command, state))
 
 }
 

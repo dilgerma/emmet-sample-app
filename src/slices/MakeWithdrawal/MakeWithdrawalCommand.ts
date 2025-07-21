@@ -1,25 +1,23 @@
-import type { Command } from '@event-driven-io/emmett'
-import { CommandHandler } from '@event-driven-io/emmett';
+import type {Command} from '@event-driven-io/emmett'
+import {CommandHandler} from '@event-driven-io/emmett';
 import {Account2Events} from "../../events/Account2Events";
 import {findEventstore} from "../../common/loadPostgresEventstore";
 
 export type MakeWithdrawalCommand = Command<'MakeWithdrawal', {
-          account: string,
-  amount: any,
-        }>;
+    account: string,
+    amount: any,
+}>;
 
 // TODO-AI keep attributes in state optional
-export type MakeWithdrawalState = {
-}
+export type MakeWithdrawalState = {}
 
-export const MakeWithdrawalInitialState = (): MakeWithdrawalState => ({
-});
+export const MakeWithdrawalInitialState = (): MakeWithdrawalState => ({});
 
 export const evolve = (
     state: MakeWithdrawalState,
     event: Account2Events,
 ): MakeWithdrawalState => {
-    const { type, data } = event;
+    const {type, data} = event;
 
     switch (type) {
         // case "..Event":
@@ -79,24 +77,28 @@ Fields:
 # Spec End
 AI-TODO end
 */
-    export const decide = (
+export const decide = (
     command: MakeWithdrawalCommand,
     state: MakeWithdrawalState,
 ): Account2Events[] => {
     return [{
         type: "WithdrawalMade",
-            data: {
-        			account:command.data.account,
-			amount:command.data.amount
-    }}]
+        data: {
+            account: command.data.account,
+            amount: command.data.amount
+        }
+    }]
 };
 
 
-const MakeWithdrawalCommandHandler = CommandHandler<MakeWithdrawalState, Account2Events>({evolve,initialState:MakeWithdrawalInitialState});
+const MakeWithdrawalCommandHandler = CommandHandler<MakeWithdrawalState, Account2Events>({
+    evolve,
+    initialState: MakeWithdrawalInitialState
+});
 
-export const handleMakeWithdrawal = async (id:string,command:MakeWithdrawalCommand) => {
+export const handleMakeWithdrawal = async (id: string, command: MakeWithdrawalCommand) => {
     const eventStore = await findEventstore()
-    await MakeWithdrawalCommandHandler(eventStore, id, (state:MakeWithdrawalState)=>decide(command,state))
+    await MakeWithdrawalCommandHandler(eventStore, id, (state: MakeWithdrawalState) => decide(command, state))
 
 }
 

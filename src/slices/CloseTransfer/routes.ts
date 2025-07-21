@@ -1,16 +1,17 @@
-import { Router, Request, Response } from 'express';
-import { CloseTransferCommand, handleCloseTransfer } from './CloseTransferCommand';
+import {Request, Response, Router} from 'express';
+import {CloseTransferCommand, handleCloseTransfer} from './CloseTransferCommand';
 import {requireUser} from "../../supabase/requireUser";
-import {on, WebApiSetup} from "@event-driven-io/emmett-expressjs";
-import {assertNotEmptyString} from "@event-driven-io/emmett";
+import {WebApiSetup} from "@event-driven-io/emmett-expressjs";
 import {assertNotEmpty} from "../../components/util/assertions";
 
 
 type CloseTransferRequest = Request<
-    Partial<{ id:string }>,
+    Partial<{ id: string }>,
     unknown,
-    Partial<{ account:string,
-transactionId:string }>
+    Partial<{
+        account: string,
+        transactionId: string
+    }>
 >;
 
 export const api =
@@ -25,19 +26,19 @@ export const api =
                 }
 
                 try {
-                    const command:CloseTransferCommand = {
+                    const command: CloseTransferCommand = {
                         data: {
-                            			account:assertNotEmpty(req.body.account),
-			transactionId:assertNotEmpty(req.body.transactionId)
+                            account: assertNotEmpty(req.body.account),
+                            transactionId: assertNotEmpty(req.body.transactionId)
                             //amount: req.body.amount,
                         },
                         type: "CloseTransfer"
                     }
                     await handleCloseTransfer(assertNotEmpty(req.params.id), command);
-                    return res.status(200).json({ ok: true });
+                    return res.status(200).json({ok: true});
                 } catch (err) {
                     console.error(err);
-                    return res.status(500).json({ ok: false, error: 'Server error' });
+                    return res.status(500).json({ok: false, error: 'Server error'});
                 }
             });
         };

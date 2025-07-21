@@ -1,25 +1,23 @@
-import type { Command } from '@event-driven-io/emmett'
-import { CommandHandler } from '@event-driven-io/emmett';
+import type {Command} from '@event-driven-io/emmett'
+import {CommandHandler} from '@event-driven-io/emmett';
 import {Account2Events} from "../../events/Account2Events";
 import {findEventstore} from "../../common/loadPostgresEventstore";
 
 export type CreateAccountCommand = Command<'CreateAccount', {
-          initialBalance: string,
-  account: string,
-        }>;
+    initialBalance: string,
+    account: string,
+}>;
 
 // TODO-AI keep attributes in state optional
-export type CreateAccountState = {
-}
+export type CreateAccountState = {}
 
-export const CreateAccountInitialState = (): CreateAccountState => ({
-});
+export const CreateAccountInitialState = (): CreateAccountState => ({});
 
 export const evolve = (
     state: CreateAccountState,
     event: Account2Events,
 ): CreateAccountState => {
-    const { type, data } = event;
+    const {type, data} = event;
 
     switch (type) {
         // case "..Event":
@@ -39,24 +37,28 @@ Remove the TODO Comment afterwards.
 
 AI-TODO end
 */
-    export const decide = (
+export const decide = (
     command: CreateAccountCommand,
     state: CreateAccountState,
 ): Account2Events[] => {
     return [{
         type: "AccountCreated",
-            data: {
-        			account:command.data.account,
-			initialBalance:command.data.initialBalance
-    }}]
+        data: {
+            account: command.data.account,
+            initialBalance: command.data.initialBalance
+        }
+    }]
 };
 
 
-const CreateAccountCommandHandler = CommandHandler<CreateAccountState, Account2Events>({evolve,initialState:CreateAccountInitialState});
+const CreateAccountCommandHandler = CommandHandler<CreateAccountState, Account2Events>({
+    evolve,
+    initialState: CreateAccountInitialState
+});
 
-export const handleCreateAccount = async (id:string,command:CreateAccountCommand) => {
+export const handleCreateAccount = async (id: string, command: CreateAccountCommand) => {
     const eventStore = await findEventstore()
-    await CreateAccountCommandHandler(eventStore, id, (state:CreateAccountState)=>decide(command,state))
+    await CreateAccountCommandHandler(eventStore, id, (state: CreateAccountState) => decide(command, state))
 
 }
 

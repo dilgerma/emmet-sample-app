@@ -1,7 +1,7 @@
-import { Router, Request, Response } from 'express';
+import {Request, Response, Router} from 'express';
 import {loadPongoClient} from "../../common/loadPongoClient";
 import {OpenTransfersReadModel} from "./OpenTransfersProjection";
-import {on, WebApiSetup} from "@event-driven-io/emmett-expressjs";
+import {WebApiSetup} from "@event-driven-io/emmett-expressjs";
 
 const router = Router();
 
@@ -19,7 +19,7 @@ export const api =
                     const db = client.db();
                     const collection = db.collection<OpenTransfersReadModel>('OpenTransfers-collection');
 
-                    const projection = await collection.findOne({ _id: account });
+                    const projection = await collection.findOne({_id: account});
 
                     // Serialize, handling bigint properly
                     const sanitized = JSON.parse(
@@ -31,7 +31,7 @@ export const api =
                     return res.status(200).json(sanitized);
                 } catch (err) {
                     console.error(err);
-                    return res.status(500).json({ ok: false, error: 'Server error' });
+                    return res.status(500).json({ok: false, error: 'Server error'});
                 }
             });
 

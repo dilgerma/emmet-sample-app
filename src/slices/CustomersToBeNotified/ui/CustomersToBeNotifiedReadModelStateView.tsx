@@ -12,7 +12,9 @@ export const CustomersToBeNotifiedReadModelStateView = () => {
 
         <h3>CustomersToBeNotifiedReadModel StateView</h3>
         <div className="controls">
-            <input onChange={(evt)=>{setId(evt.target.value)}} type="text" placeholder="Id" className="input"/>
+            <input onChange={(evt) => {
+                setId(evt.target.value)
+            }} type="text" placeholder="Id" className="input"/>
         </div>
         <div className={"top-margin"}/>
 

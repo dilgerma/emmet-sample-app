@@ -1,7 +1,7 @@
-import { useRouter } from 'next/router'
-import { useState } from 'react'
+import {useRouter} from 'next/router'
+import {useState} from 'react'
 
-import { createClient } from '../../supabase/component'
+import {createClient} from '../../supabase/component'
 
 export default function LoginPage() {
     const router = useRouter()
@@ -11,7 +11,7 @@ export default function LoginPage() {
     const [password, setPassword] = useState('')
 
     async function logIn() {
-        const { error } = await supabase.auth.signInWithPassword({ email, password })
+        const {error} = await supabase.auth.signInWithPassword({email, password})
         if (error) {
             console.error(error)
         }
@@ -19,7 +19,7 @@ export default function LoginPage() {
     }
 
     async function signUp() {
-        const { error } = await supabase.auth.signUp({ email, password })
+        const {error} = await supabase.auth.signUp({email, password})
         if (error) {
             console.error(error)
         }
@@ -30,7 +30,7 @@ export default function LoginPage() {
         <main>
             <form>
                 <label htmlFor="email">Email:</label>
-                <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} />
+                <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}/>
                 <label htmlFor="password">Password:</label>
                 <input
                     id="password"
